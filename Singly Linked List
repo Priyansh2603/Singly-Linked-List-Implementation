@@ -1,0 +1,134 @@
+#include <bits/stdc++.h>
+using namespace std;
+class Node{
+    public:
+    int data;
+    Node* next;
+    Node(int data){
+        this->data = data;
+        this->next = NULL;
+    }
+};
+//Inserting at Start
+void insertAthead(Node* &head, int d){
+    Node* temp = new Node(d);
+    temp->next = head;
+    head=temp;
+}
+//Inserting At End
+void insertAtlast(Node* &head, int d){
+    Node* p=head;
+    while(p->next!=NULL){
+        p=p->next;
+    }
+    Node* temp = new Node(d);
+    p->next=temp;
+    temp->next=NULL;
+}
+//Inserting At Any Position
+void insertAtAnyPos(Node* &head, int P, int d){
+    if(P==1){
+        insertAthead(head,d);
+        return;
+    }
+    Node* p=head;
+    int count=1;
+    while(p!=NULL && count<P-1){
+        p=p->next;
+        count++;
+    }
+    if(p==NULL){
+        insertAtlast(head,d);
+        return;
+    }
+    cout<<"Inserted At: "<<count<<" "<<d<<endl;
+    Node* temp = new Node(d);
+    temp->next=p->next;
+    p->next=temp;
+}
+void print(Node* &head){
+    Node* p=head;
+    while(p!=NULL){
+        cout<<"["<<p->data<<"]"<<"->";
+        p=p->next;
+    }
+    cout<<"X"<<endl;
+}
+//Delete At Head
+void DeleteAthead(Node* &head){
+    Node* p=head;
+    head=head->next;
+    free(p);
+}
+//Delete At Last
+void DeleteAtlast(Node* &head){
+    Node* p=head;
+    while(p->next->next!=NULL){
+        p=p->next;
+    }
+    p->next=NULL;
+}
+//Delete At Any point with matching data
+void DeleteAny(Node* &head, int data){
+    Node* p=head;
+    if(head->data==data){
+        DeleteAthead(head);
+        return;
+    }
+    while(p->next->data!=data && p->next->next!=NULL){
+        p=p->next;
+    }
+    if(p->next->next==NULL && p->next->data!=data ){
+        cout<<"Oops! No Data Found"<<endl;
+        return;
+    }
+    p->next=p->next->next;
+}
+//Delete At Any Position by passing position
+void DeletebyPos(Node* &head, int pos){
+    if(pos==1){
+        DeleteAthead(head);
+        return;
+    }
+    int cnt=1;
+    Node* p=head;
+    while(p->next->next!=NULL && cnt<pos-1){
+        p=p->next;
+        cnt++;
+    }
+    if(p->next->next==NULL){
+        cout<<"Sorry ! You tried out of range."<<endl;
+    }
+    else{
+        p->next=p->next->next;
+    }
+}
+int main()
+{
+    Node* temp = new Node(25);
+    insertAthead(temp,5);
+    insertAtAnyPos(temp,1,1);
+    insertAtlast(temp,35);
+    insertAtlast(temp,45);
+    insertAtlast(temp,51);
+    insertAtAnyPos(temp,3,15);
+    insertAtAnyPos(temp,4,40);
+    insertAtAnyPos(temp,2,125);
+    cout<<"The Initial List is: ";
+    print(temp);
+    DeleteAthead(temp);
+    print(temp);
+    DeleteAny(temp,51);
+    print(temp);
+    DeleteAny(temp,15);
+    print(temp);
+    DeleteAtlast(temp);
+    print(temp);
+    DeleteAny(temp,15);
+    print(temp);
+    DeletebyPos(temp,3);
+    print(temp);
+    DeletebyPos(temp,5);
+    print(temp);
+    return 0;
+}
